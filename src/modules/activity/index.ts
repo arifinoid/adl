@@ -1,11 +1,12 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { authPlugin, isAuth } from "../../plugins/auth";
 import { ActivityService } from "./service";
 import { 
     CreateActivityModel, 
     UpdateActivityModel, 
     ActivityParamsModel, 
-    ActivityQueryModel 
+    ActivityQueryModel,
+    ActivityModel
 } from "./model";
 
 const activityService = new ActivityService();
@@ -17,15 +18,22 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
         'activity.create': CreateActivityModel,
         'activity.update': UpdateActivityModel,
         'activity.params': ActivityParamsModel,
-        'activity.query': ActivityQueryModel
+        'activity.query': ActivityQueryModel,
+        'activity.response': ActivityModel
     })
-    .get("/home", ({ user }) => {
-        return activityService.getSummary(user!.id);
+    .get("/home", ({ user }) => activityService.getSummary(user!.id), {
+        detail: {
+            tags: ['Activities'],
+            summary: 'Get dashboard summary'
+        }
     })
-    .get("/", ({ user, query }) => {
-        return activityService.findByUser(user!.id, query);
-    }, {
-        query: 'activity.query'
+    .get("/", ({ user, query }) => activityService.findByUser(user!.id, query), {
+        query: 'activity.query',
+        response: t.Array(ActivityModel),
+        detail: {
+            tags: ['Activities'],
+            summary: 'List user activities'
+        }
     })
     .get("/:id", async ({ params, user, set }) => {
         const activity = await activityService.findById(params.id, user!.id);
@@ -35,7 +43,15 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
         }
         return activity;
     }, {
-        params: 'activity.params'
+        params: 'activity.params',
+        response: {
+            200: ActivityModel,
+            404: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Activities'],
+            summary: 'Get activity detail'
+        }
     })
     .post("/", async ({ body, user }) => {
         return await activityService.create({
@@ -45,7 +61,12 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
             scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null,
         });
     }, {
-        body: 'activity.create'
+        body: 'activity.create',
+        response: ActivityModel,
+        detail: {
+            tags: ['Activities'],
+            summary: 'Create new activity'
+        }
     })
     .patch("/:id", async ({ params, body, user, set }) => {
         const updateData = {
@@ -61,7 +82,15 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
         return updated;
     }, {
         params: 'activity.params',
-        body: 'activity.update'
+        body: 'activity.update',
+        response: {
+            200: ActivityModel,
+            404: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Activities'],
+            summary: 'Update activity'
+        }
     })
     .delete("/:id", async ({ params, user, set }) => {
         const success = await activityService.delete(params.id, user!.id);
@@ -71,5 +100,13 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
         }
         return { message: "Activity deleted successfully" };
     }, {
-        params: 'activity.params'
+        params: 'activity.params',
+        response: {
+            200: t.Object({ message: t.String() }),
+            404: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Activities'],
+            summary: 'Delete activity'
+        }
     });

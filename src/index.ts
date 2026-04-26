@@ -9,6 +9,8 @@ const port = process.env.PORT || 8000;
 const app = new Elysia()
     .use(cors())
     .use(swagger({
+        path: '/swagger',
+        provider: 'swagger-ui',
         documentation: {
             info: {
                 title: 'ADL Backend Documentation',
@@ -20,13 +22,16 @@ const app = new Elysia()
         message: "ADL Backend API",
         status: "running"
     }))
-    .group("/api", (app) => 
+    .group("/api", (app) =>
         app
+            .get("/health", () => ({ status: "ok" }))
             .use(authModule)
             .use(activityModule)
-            .get("/health", () => ({ status: "ok" }))
     )
-    .listen(port);
+    .listen({
+        port: Number(port),
+        hostname: '0.0.0.0'
+    });
 
 console.log(
     `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`

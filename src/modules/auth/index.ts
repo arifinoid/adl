@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { jwt } from "@elysiajs/jwt";
 import { AuthService } from "./service";
 import { RegisterModel, LoginModel } from "./model";
@@ -41,7 +41,22 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
             },
         };
     }, {
-        body: 'auth.register'
+        body: 'auth.register',
+        response: {
+            200: t.Object({
+                message: t.String(),
+                user: t.Object({
+                    id: t.Number(),
+                    username: t.String(),
+                    email: t.String()
+                })
+            }),
+            400: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Auth'],
+            summary: 'Register a new user'
+        }
     })
     .post("/login", async ({ body, set, jwt }) => {
         const { identity, password } = body;
@@ -68,5 +83,16 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
             token,
         };
     }, {
-        body: 'auth.login'
+        body: 'auth.login',
+        response: {
+            200: t.Object({
+                message: t.String(),
+                token: t.String()
+            }),
+            401: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Auth'],
+            summary: 'Login to get access token'
+        }
     });
