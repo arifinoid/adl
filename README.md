@@ -43,7 +43,7 @@ Run the server in development mode (with hot reload):
 ```bash
 bun run dev
 ```
-The server will start on `http://localhost:3000` (or the port specified in your `.env` file).
+The server will start on `http://localhost:8000` (or the port specified in your `.env` file).
 
 ### Using Docker
 To build and run the application using Docker, run:
