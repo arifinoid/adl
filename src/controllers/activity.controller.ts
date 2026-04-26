@@ -5,22 +5,17 @@ import type { UserPayload } from "../types/auth.type";
 
 const activityService = new ActivityService();
 
-// Helper type for authenticated context
-type AuthContext = Context & {
-    user: UserPayload;
-};
-
 export const ActivityController = {
-    async getHome({ user }: AuthContext) {
-        return await activityService.getSummary(user.id);
+    async getHome({ user }: any) {
+        return await activityService.getSummary(user!.id);
     },
 
-    async list({ user, query }: AuthContext & { query: ActivityQuery }) {
-        return await activityService.findByUser(user.id, query);
+    async list({ user, query }: any) {
+        return await activityService.findByUser(user!.id, query);
     },
 
-    async getDetail({ params, user, set }: AuthContext & { params: { id: number } }) {
-        const activity = await activityService.findById(params.id, user.id);
+    async getDetail({ params, user, set }: any) {
+        const activity = await activityService.findById(params.id, user!.id);
 
         if (!activity) {
             set.status = 404;
@@ -30,22 +25,22 @@ export const ActivityController = {
         return activity;
     },
 
-    async create({ body, user }: AuthContext & { body: CreateActivityBody }) {
+    async create({ body, user }: any) {
         return await activityService.create({
-            userId: user.id,
+            userId: user!.id,
             title: body.title,
             description: body.description,
             scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null,
         });
     },
 
-    async update({ params, body, user, set }: AuthContext & { params: { id: number }; body: UpdateActivityBody }) {
+    async update({ params, body, user, set }: any) {
         const updateData = {
             ...body,
             scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : undefined
         };
 
-        const updated = await activityService.update(params.id, user.id, updateData);
+        const updated = await activityService.update(params.id, user!.id, updateData);
 
         if (!updated) {
             set.status = 404;
@@ -55,8 +50,8 @@ export const ActivityController = {
         return updated;
     },
 
-    async delete({ params, user, set }: AuthContext & { params: { id: number } }) {
-        const success = await activityService.delete(params.id, user.id);
+    async delete({ params, user, set }: any) {
+        const success = await activityService.delete(params.id, user!.id);
 
         if (!success) {
             set.status = 404;

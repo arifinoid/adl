@@ -1,6 +1,6 @@
 import type { Context } from "elysia";
 import { AuthService } from "../services/auth.service";
-import type { RegisterBody, LoginBody } from "../types/auth.type";
+import type { RegisterBody, LoginBody, UserPayload } from "../types/auth.type";
 
 const authService = new AuthService();
 
@@ -31,7 +31,10 @@ export const AuthController = {
         };
     },
 
-    async login({ body, set, jwt }: Context & { body: LoginBody; jwt: { sign: (payload: object) => Promise<string> } }) {
+    async login({ body, set, jwt }: Context & { 
+        body: LoginBody; 
+        jwt: { sign: (payload: UserPayload) => Promise<string> } 
+    }) {
         const { identity, password } = body;
 
         const user = await authService.findByIdentity(identity);

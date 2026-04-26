@@ -1,4 +1,4 @@
-import { Elysia } from "elysia";
+import { Elysia, t } from "elysia";
 import { jwt } from "@elysiajs/jwt";
 
 export const authMiddleware = (app: Elysia) => 
@@ -6,19 +6,37 @@ export const authMiddleware = (app: Elysia) =>
         .use(
             jwt({
                 name: "jwt",
-                secret: process.env.JWT_SECRET || "supersecret"
+                secret: process.env.JWT_SECRET || "supersecret",
+                schema: t.Object({
+                    id: t.Number(),
+                    username: t.String()
+                })
             })
         )
-        .derive(async ({ jwt, request }) => {
+        .derive(async ({ jwt, request, set }) => {
             const auth = request.headers.get("authorization");
             
-            if (!auth) return { user: null };
+            if (!auth) {
+                set.status = 401;
+                return { user: null };
+            }
 
             const token = auth.split(" ")[1];
-            if (!token) return { user: null };
+            if (!token) {
+                set.status = 401;
+                return { user: null };
+            }
 
             const payload = await jwt.verify(token);
-            return { user: payload || null };
+
+            if (!payload) {
+                set.status = 401;
+                return { user: null };
+            }
+
+            return {
+                user: payload
+            };
         })
         .onBeforeHandle(({ user, set }) => {
             if (!user) {
