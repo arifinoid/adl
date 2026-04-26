@@ -1,6 +1,10 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
+import { authRoutes } from "./routes/auth.route";
+import { activityRoutes } from "./routes/activity.route";
+
+const port = process.env.PORT || 8000;
 
 const app = new Elysia()
     .use(cors())
@@ -11,10 +15,12 @@ const app = new Elysia()
     }))
     .group("/api", (app) =>
         app
+            .use(authRoutes)
+            .use(activityRoutes)
             .get("/health", () => ({ status: "ok" }))
-        // Add other routes here
+        // Protected routes will go here
     )
-    .listen(8000);
+    .listen(port);
 
 console.log(
     `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
