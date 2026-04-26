@@ -1,24 +1,30 @@
 import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
-import { authRoutes } from "./routes/auth.route";
-import { activityRoutes } from "./routes/activity.route";
+import { authModule } from "./modules/auth";
+import { activityModule } from "./modules/activity";
 
 const port = process.env.PORT || 8000;
 
 const app = new Elysia()
     .use(cors())
-    .use(swagger())
+    .use(swagger({
+        documentation: {
+            info: {
+                title: 'ADL Backend Documentation',
+                version: '1.0.0'
+            }
+        }
+    }))
     .get("/", () => ({
         message: "ADL Backend API",
         status: "running"
     }))
-    .group("/api", (app) =>
+    .group("/api", (app) => 
         app
-            .use(authRoutes)
-            .use(activityRoutes)
+            .use(authModule)
+            .use(activityModule)
             .get("/health", () => ({ status: "ok" }))
-        // Protected routes will go here
     )
     .listen(port);
 
