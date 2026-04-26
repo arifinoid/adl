@@ -10,9 +10,5 @@ export const authRoutes = new Elysia({ prefix: "/auth" })
             secret: process.env.JWT_SECRET || "supersecret"
         })
     )
-    .post("/register", AuthController.register, {
-        body: RegisterSchema
-    })
-    .post("/login", AuthController.login, {
-        body: LoginSchema
-    });
+    .post("/register", AuthController.register, { body: RegisterSchema })
+    .post("/login", AuthController.login, { body: LoginSchema });
