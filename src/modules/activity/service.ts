@@ -1,8 +1,8 @@
-import { db } from "../db";
-import { activities } from "../db/schema";
+import { db } from "../../db";
+import { activities } from "../../db/schema";
 import { eq, and, desc, like, SQL } from "drizzle-orm";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import type { ActivityQuery } from "../types/activity.type";
+import type { ActivityQuery } from "./model";
 
 export type Activity = InferSelectModel<typeof activities>;
 export type NewActivity = InferInsertModel<typeof activities>;
@@ -28,13 +28,13 @@ export class ActivityService {
             .orderBy(desc(activities.createdAt));
     }
 
-    async findById(id: number, userId: number): Promise<Activity | undefined> {
+    async findById(id: number, userId: number): Promise<Activity | null> {
         const [activity] = await db
             .select()
             .from(activities)
             .where(and(eq(activities.id, id), eq(activities.userId, userId)))
             .limit(1);
-        return activity;
+        return activity || null;
     }
 
     async create(data: NewActivity): Promise<Activity> {
@@ -45,13 +45,13 @@ export class ActivityService {
         return newActivity;
     }
 
-    async update(id: number, userId: number, data: Partial<NewActivity>): Promise<Activity | undefined> {
+    async update(id: number, userId: number, data: Partial<NewActivity>): Promise<Activity | null> {
         const [updatedActivity] = await db
             .update(activities)
             .set(data)
             .where(and(eq(activities.id, id), eq(activities.userId, userId)))
             .returning();
-        return updatedActivity;
+        return updatedActivity || null;
     }
 
     async delete(id: number, userId: number): Promise<boolean> {

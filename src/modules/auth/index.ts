@@ -1,11 +1,22 @@
-import type { Context } from "elysia";
-import { AuthService } from "../services/auth.service";
-import type { RegisterBody, LoginBody } from "../types/auth.type";
+import { Elysia } from "elysia";
+import { jwt } from "@elysiajs/jwt";
+import { AuthService } from "./service";
+import { RegisterModel, LoginModel } from "./model";
 
 const authService = new AuthService();
 
-export const AuthController = {
-    async register({ body, set }: Context & { body: RegisterBody }) {
+export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
+    .use(
+        jwt({
+            name: "jwt",
+            secret: process.env.JWT_SECRET || "supersecret"
+        })
+    )
+    .model({
+        'auth.register': RegisterModel,
+        'auth.login': LoginModel
+    })
+    .post("/register", async ({ body, set }) => {
         const { username, email, password } = body;
 
         const exists = await authService.userExists(username, email);
@@ -29,9 +40,10 @@ export const AuthController = {
                 email: newUser.email,
             },
         };
-    },
-
-    async login({ body, set, jwt }: Context & { body: LoginBody; jwt: { sign: (payload: object) => Promise<string> } }) {
+    }, {
+        body: 'auth.register'
+    })
+    .post("/login", async ({ body, set, jwt }) => {
         const { identity, password } = body;
 
         const user = await authService.findByIdentity(identity);
@@ -55,5 +67,6 @@ export const AuthController = {
             message: "Login successful",
             token,
         };
-    }
-};
+    }, {
+        body: 'auth.login'
+    });
