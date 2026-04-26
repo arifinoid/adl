@@ -19,6 +19,17 @@ export const ActivityQueryModel = t.Object({
     search: t.Optional(t.String()),
 });
 
+export const ActivityModel = t.Object({
+    id: t.Number(),
+    title: t.String(),
+    description: t.Union([t.String(), t.Null()]),
+    isCompleted: t.Boolean(),
+    scheduledAt: t.Union([t.Date(), t.Null(), t.String()]), // Handle both Date objects and ISO strings
+    createdAt: t.Any(), // Simplest for now
+    userId: t.Number()
+});
+
 export type CreateActivityBody = typeof CreateActivityModel.static;
 export type UpdateActivityBody = typeof UpdateActivityModel.static;
 export type ActivityQuery = typeof ActivityQueryModel.static;
+export type ActivityResponse = typeof ActivityModel.static;
