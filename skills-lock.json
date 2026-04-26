@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "skills": {
+    "Functional Programming Fundamentals": {
+      "source": "whatiskadudoing/fp-ts-skills",
+      "sourceType": "github",
+      "computedHash": "0da195e3bce1fe6b115b5b114eea8c564e1b652d5d32f2c1175a32ad97d9a2ee"
+    },
+    "elysiajs": {
+      "source": "elysiajs/skills",
+      "sourceType": "github",
+      "computedHash": "55268e69a2c766ed67e56a0db57544f60cc52dba0c7f024a974baf965e525e1b"
+    },
+    "fp-ts-backend": {
+      "source": "whatiskadudoing/fp-ts-skills",
+      "sourceType": "github",
+      "computedHash": "5a5ef8b5a7b3d4f85701861af9b1763de780ff62bdf2be09c5a9587485121370"
+    },
+    "fp-ts-pragmatic": {
+      "source": "sickn33/antigravity-awesome-skills",
+      "sourceType": "github",
+      "computedHash": "05657f503cda3701c9cd2f7d3b16dff3070e063b552a7d0ba002caddd3985764"
+    },
+    "nodejs-backend-patterns": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "c6a99966c2565acc388e574039127abc770bb9a3338be761e421e16f023f702b"
+    },
+    "typescript-advanced-types": {
+      "source": "wshobson/agents",
+      "sourceType": "github",
+      "computedHash": "3a3be8c925f96ac4e1280db28a01677e7ca5197f3792de2bbf35ab3bb324b6dd"
+    }
+  }
+}
