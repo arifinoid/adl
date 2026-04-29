@@ -7,7 +7,7 @@ export const RegisterModel = t.Object({
 });
 
 export const LoginModel = t.Object({
-    identity: t.String(),
+    email: t.String({ format: "email" }),
     password: t.String(),
 });
 

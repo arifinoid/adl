@@ -1,19 +1,11 @@
-import { Elysia, t } from "elysia";
-import { jwt } from "@elysiajs/jwt";
+import { Elysia } from "elysia";
+import { AuthService } from "../modules/auth/service";
+
+const authService = new AuthService();
 
 export const authMiddleware = (app: Elysia) => 
     app
-        .use(
-            jwt({
-                name: "jwt",
-                secret: process.env.JWT_SECRET || "supersecret",
-                schema: t.Object({
-                    id: t.Number(),
-                    username: t.String()
-                })
-            })
-        )
-        .derive(async ({ jwt, request, set }) => {
+        .derive(async ({ request, set }) => {
             const auth = request.headers.get("authorization");
             
             if (!auth) {
@@ -27,15 +19,15 @@ export const authMiddleware = (app: Elysia) =>
                 return { user: null };
             }
 
-            const payload = await jwt.verify(token);
+            const user = await authService.findSessionByToken(token);
 
-            if (!payload) {
+            if (!user) {
                 set.status = 401;
                 return { user: null };
             }
 
             return {
-                user: payload
+                user
             };
         })
         .onBeforeHandle(({ user, set }) => {
@@ -44,3 +36,4 @@ export const authMiddleware = (app: Elysia) =>
                 return { message: "Unauthorized" };
             }
         });
+

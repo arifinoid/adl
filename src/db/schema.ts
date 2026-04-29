@@ -17,3 +17,11 @@ export const activities = pgTable("activities", {
     scheduledAt: timestamp("scheduled_at"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const sessions = pgTable("sessions", {
+    id: serial("id").primaryKey(),
+    token: text("token").notNull(),
+    userId: integer("user_id").references(() => users.id).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
