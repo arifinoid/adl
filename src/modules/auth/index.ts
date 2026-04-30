@@ -58,7 +58,7 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
         const user = await authService.findByEmail(email);
         if (!user) {
             set.status = 401;
-            return { 
+            return {
                 message: "Invalid credentials",
                 token: null
             };
@@ -67,7 +67,7 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
         const isPasswordValid = await Bun.password.verify(password, user.password);
         if (!isPasswordValid) {
             set.status = 401;
-            return { 
+            return {
                 message: "Invalid credentials",
                 token: null
             };
@@ -86,7 +86,7 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
                 message: t.String(),
                 token: t.String()
             }),
-            401: t.Object({ 
+            401: t.Object({
                 message: t.String(),
                 token: t.Null()
             })

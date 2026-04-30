@@ -4,6 +4,7 @@ import { cors } from "@elysiajs/cors";
 import { authModule } from "./modules/auth";
 import { activityModule } from "./modules/activity";
 import { userModule } from "./modules/users";
+import { loggerPlugin } from "./plugins/logger";
 
 const port = process.env.PORT || 8000;
 const SWAGGER_OPTS: ElysiaSwaggerConfig = {
@@ -51,6 +52,7 @@ const handleError = ({ code, error, set }: any) => {
 
 export const app = new Elysia()
     .use(cors())
+    .use(loggerPlugin)
     .use(swagger(SWAGGER_OPTS))
     .get("/", () => ({
         message: "ADL Backend API",
