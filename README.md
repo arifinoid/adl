@@ -79,7 +79,7 @@ bun test tests/
 ```
 
 ## 📖 API Documentation
-Once the server is running, you can access the interactive Swagger documentation at:
+Once the server is running, you can access the beautiful, interactive API documentation (powered by **Scalar**) at:
 `http://localhost:8000/swagger`
 
 ### Key Endpoints
