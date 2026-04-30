@@ -44,7 +44,7 @@ describe("User Module", () => {
             );
 
             expect(res.status).toBe(200);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data.name).toBe("profileuser");
             expect(data.email).toBe("profile@example.com");
             expect(data.id).toBeDefined();

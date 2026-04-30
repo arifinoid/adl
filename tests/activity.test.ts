@@ -24,7 +24,7 @@ describe("Activity Module", () => {
                 body: JSON.stringify({ email: "act@example.com", password: "password" })
             })
         );
-        token = (await loginRes.json()).token;
+        token = ((await loginRes.json()) as any).token;
 
         // Register and login another user for isolation tests
         await app.handle(
@@ -41,7 +41,7 @@ describe("Activity Module", () => {
                 body: JSON.stringify({ email: "other@example.com", password: "password" })
             })
         );
-        otherToken = (await otherLoginRes.json()).token;
+        otherToken = ((await otherLoginRes.json()) as any).token;
     });
 
     describe("POST /api/activities", () => {
@@ -61,7 +61,7 @@ describe("Activity Module", () => {
             );
 
             expect(res.status).toBe(200);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data.title).toBe("Test Activity");
             expect(data.id).toBeDefined();
         });
@@ -102,7 +102,7 @@ describe("Activity Module", () => {
             );
 
             expect(res.status).toBe(200);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data).toHaveLength(1);
             expect(data[0].title).toBe("User Act 1");
         });
@@ -117,7 +117,7 @@ describe("Activity Module", () => {
                 headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({ title: "Patch Me" })
             }));
-            activityId = (await createRes.json()).id;
+            activityId = ((await createRes.json()) as any).id;
         });
 
         it("should update user's activity", async () => {
@@ -133,7 +133,7 @@ describe("Activity Module", () => {
             );
 
             expect(res.status).toBe(200);
-            expect((await res.json()).isCompleted).toBe(true);
+            expect(((await res.json()) as any).isCompleted).toBe(true);
         });
 
         it("should return 404 when updating other user's activity", async () => {
@@ -160,7 +160,7 @@ describe("Activity Module", () => {
                 headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json" },
                 body: JSON.stringify({ title: "Delete Me" })
             }));
-            activityId = (await createRes.json()).id;
+            activityId = ((await createRes.json()) as any).id;
         });
 
         it("should delete user's activity", async () => {

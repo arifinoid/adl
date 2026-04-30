@@ -9,8 +9,7 @@ import { loggerPlugin } from "./plugins/logger";
 const port = process.env.PORT || 8000;
 const SWAGGER_OPTS: ElysiaSwaggerConfig = {
     path: '/swagger',
-    provider: 'scalar',
-    scalar: {
+    scalarConfig: {
         theme: 'kepler',
         layout: 'modern',
     },
