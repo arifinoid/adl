@@ -1,59 +1,91 @@
-# Activity Daily Living (ADL) Backend App
+# Activity Daily Living (ADL) Backend
 
-Backend service for the Activity Daily Living (ADL) PWA application.
+Backend service for the Activity Daily Living (ADL) PWA application. This project is built using a modern, high-performance stack focusing on developer experience and speed.
 
-## Tech Stack
-- **Bun** (Runtime & Package Manager)
-- **Elysia JS** (Web Framework)
-- **Drizzle ORM** (Database ORM)
-- **Supabase / PostgreSQL** (Database)
-- **TypeScript** (Language)
-- **Docker** (Containerization)
+## 🚀 Tech Stack
+- **Runtime**: [Bun](https://bun.sh/)
+- **Framework**: [Elysia.js](https://elysiajs.com/)
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Database**: PostgreSQL (Supabase or Local Docker)
+- **Validation**: [TypeBox](https://github.com/sinclairzx81/typebox)
+- **Documentation**: [Swagger](https://swagger.io/)
+- **Containerization**: [Docker](https://www.docker.com/)
 
-## Prerequisites
+## 🏗 Architecture
+This project follows a **Modular Architecture** pattern. Each feature or domain is contained within its own directory under `src/modules`.
+
+### Folder Structure
+- `src/modules/`: Contains domain-specific modules (Auth, Users, Activities).
+  - `index.ts`: Controller and route definitions.
+  - `service.ts`: Business logic and database operations.
+  - `model.ts`: TypeBox schemas for request/response validation.
+- `src/db/`: Database configuration and schema definitions.
+  - `schema.ts`: Drizzle table definitions.
+- `src/plugins/`: Global Elysia plugins (e.g., Auth, Logger).
+- `tests/`: Unit and integration tests using `bun test`.
+- `.agents/`: Custom AI agent skills for automated development tasks.
+
+### File Naming Conventions
+- `*.test.ts`: Test files.
+- `*.service.ts`: Service layer files.
+- `*.model.ts`: Validation schema files.
+
+## 🛠 Prerequisites
 - [Bun](https://bun.sh/) installed locally.
-- [Docker](https://www.docker.com/) and docker-compose installed.
-- Supabase account/project configured.
+- [Docker](https://www.docker.com/) and `docker-compose` (optional, for local DB).
 
-## Setup Instructions
+## ⚙️ Setup Instructions
 
-1. **Environment Variables:**
-   Copy the example environment variables file and fill in your Supabase database URL and other credentials.
+1. **Environment Variables**:
+   Copy the example environment variables file and configure your database URL.
    ```bash
    cp .env.example .env
    ```
 
-2. **Install Dependencies:**
+2. **Install Dependencies**:
    ```bash
    bun install
    ```
 
-## Database Setup
+3. **Database Synchronization**:
+   Push your schema to the database:
+   ```bash
+   bun run db:push
+   ```
 
-Run Drizzle migrations to sync your schema with the Supabase PostgreSQL database:
-```bash
-bun run db:generate
-bun run db:push
-```
-
-## Running the Application
+## 🏃 Running the Application
 
 ### Local Development
-Run the server in development mode (with hot reload):
+Run the server with hot reload:
 ```bash
 bun run dev
 ```
-The server will start on `http://localhost:8000` (or the port specified in your `.env` file).
+The server will be available at `http://localhost:8000`.
 
-### Using Docker
-To build and run the application using Docker, run:
+### Running with Docker
+Start the entire stack (App + Database):
 ```bash
 docker-compose up --build
 ```
-This will containerize the backend and make it accessible locally.
+To run only the database:
+```bash
+docker-compose up -d db
+```
 
-## Available Scripts
-- `bun run dev`: Start the development server.
-- `bun run build`: Build the project for production.
-- `bun run start`: Start the compiled production server.
-- `bun run db:studio`: Open Drizzle Studio to view database contents.
+## 🧪 Testing
+We use `bun test` for our test suite. Ensure your database is running before executing tests as they perform database operations with cleanup.
+```bash
+bun test tests/
+```
+
+## 📖 API Documentation
+Once the server is running, you can access the interactive Swagger documentation at:
+`http://localhost:8000/swagger`
+
+### Key Endpoints
+- **Auth**: `/api/auth/register`, `/api/auth/login`, `/api/auth/logout`
+- **Users**: `/api/users/profile`
+- **Activities**: `/api/activities` (Full CRUD)
+
+## 🤖 AI Agent Skills
+This repository is equipped with agent skills in the `.agents` folder. These skills can be used by compatible AI coding assistants to automate tasks like creating new modules, running tests, or performing code cleanups.
