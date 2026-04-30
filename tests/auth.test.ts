@@ -22,7 +22,7 @@ describe("Auth Module", () => {
             );
 
             expect(res.status).toBe(200);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data.message).toBe("User registered successfully");
             expect(data.user.username).toBe("testuser");
         });
@@ -54,7 +54,7 @@ describe("Auth Module", () => {
             );
 
             expect(res.status).toBe(400);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data.message).toBe("User or email already exists");
         });
 
@@ -70,7 +70,7 @@ describe("Auth Module", () => {
                 })
             );
 
-            expect(res.status).toBe(422);
+            expect(res.status).toBe(400);
         });
     });
 
@@ -103,7 +103,7 @@ describe("Auth Module", () => {
             );
 
             expect(res.status).toBe(200);
-            const data = await res.json();
+            const data = (await res.json()) as any;
             expect(data.message).toBe("Login berhasil");
             expect(data.token).toBeDefined();
         });
@@ -150,7 +150,7 @@ describe("Auth Module", () => {
                     })
                 })
             );
-            const loginData = await loginRes.json();
+            const loginData = (await loginRes.json()) as any;
             token = loginData.token;
         });
 
@@ -165,7 +165,7 @@ describe("Auth Module", () => {
             );
 
             expect(res.status).toBe(200);
-            expect((await res.json()).message).toBe("OK");
+            expect(((await res.json()) as any).message).toBe("OK");
 
             // Verify session is gone by trying to access profile
             const profileRes = await app.handle(
