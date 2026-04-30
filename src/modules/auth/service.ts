@@ -58,6 +58,7 @@ export class AuthService {
                 id: users.id,
                 username: users.username,
                 email: users.email,
+                createdAt: sessions.createdAt,
             })
             .from(sessions)
             .innerJoin(users, eq(sessions.userId, users.id))

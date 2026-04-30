@@ -3,6 +3,7 @@ import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { authModule } from "./modules/auth";
 import { activityModule } from "./modules/activity";
+import { userModule } from "./modules/users";
 
 const port = process.env.PORT || 8000;
 
@@ -27,6 +28,7 @@ const app = new Elysia()
             .get("/health", () => ({ status: "ok" }))
             .use(authModule)
             .use(activityModule)
+            .use(userModule)
     )
     .listen({
         port: Number(port),
