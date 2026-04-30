@@ -14,7 +14,6 @@
   "dependencies": {
     "@elysiajs/cors": "latest",
     "@elysiajs/swagger": "latest",
-    "@elysiajs/jwt": "latest",
     "elysia": "latest",
     "drizzle-orm": "latest",
     "postgres": "latest",
