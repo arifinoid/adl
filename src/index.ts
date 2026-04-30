@@ -49,7 +49,7 @@ const handleError = ({ code, error, set }: any) => {
     };
 }
 
-const app = new Elysia()
+export const app = new Elysia()
     .use(cors())
     .use(swagger(SWAGGER_OPTS))
     .get("/", () => ({
@@ -63,14 +63,17 @@ const app = new Elysia()
             .use(activityModule)
             .use(userModule)
     )
-    .onError(handleError)
-    .listen({
+    .onError(handleError);
+
+if (import.meta.main) {
+    app.listen({
         port: Number(port),
         hostname: '0.0.0.0'
     });
 
-console.log(
-    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+    console.log(
+        `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+    );
+}
 
 export type App = typeof app;

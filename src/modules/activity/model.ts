@@ -6,7 +6,12 @@ export const CreateActivityModel = t.Object({
     scheduledAt: t.Optional(t.String()),
 });
 
-export const UpdateActivityModel = t.Partial(CreateActivityModel);
+export const UpdateActivityModel = t.Object({
+    title: t.Optional(t.String()),
+    description: t.Optional(t.String()),
+    scheduledAt: t.Optional(t.String()),
+    isCompleted: t.Optional(t.Boolean()),
+});
 
 export const ActivityParamsModel = t.Object({
     id: t.Numeric(),

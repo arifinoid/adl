@@ -6,6 +6,12 @@
       "sourceType": "github",
       "computedHash": "0da195e3bce1fe6b115b5b114eea8c564e1b652d5d32f2c1175a32ad97d9a2ee"
     },
+    "bun-test": {
+      "source": "daleseo/bun-skills",
+      "sourceType": "github",
+      "skillPath": "skills/bun-test/SKILL.md",
+      "computedHash": "1b2368cad9b61944aec3781f81d012ba7e6ab31f09fb8f927c6f9d60c979ad0a"
+    },
     "elysiajs": {
       "source": "elysiajs/skills",
       "sourceType": "github",
