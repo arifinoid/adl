@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { AuthService } from "./service";
 import { RegisterModel, LoginModel } from "./model";
+import { isAuth } from "../../plugins/auth";
 
 const authService = new AuthService();
 
@@ -94,4 +95,19 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
             tags: ['Auth'],
             summary: 'Login to get access token'
         }
+    })
+    .use(isAuth)
+    .post("/logout", async ({ token }) => {
+        await authService.deleteSession(token!);
+        return { message: "OK" };
+    }, {
+        response: {
+            200: t.Object({ message: t.String() }),
+            401: t.Object({ message: t.String() })
+        },
+        detail: {
+            tags: ['Auth'],
+            summary: 'Logout current user'
+        }
     });
+

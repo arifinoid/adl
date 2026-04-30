@@ -66,5 +66,13 @@ export class AuthService {
             .limit(1);
         return session || null;
     }
+
+    async deleteSession(token: string): Promise<boolean> {
+        const result = await db
+            .delete(sessions)
+            .where(eq(sessions.token, token))
+            .returning();
+        return result.length > 0;
+    }
 }
 
