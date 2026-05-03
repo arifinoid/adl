@@ -7,78 +7,84 @@ import { userModule } from "./modules/users";
 import { loggerPlugin } from "./plugins/logger";
 
 const port = process.env.PORT || 8000;
+const corsOrigin = process.env.CORS_ORIGIN || true; // true allows all, or provide a specific string/array
+
 const SWAGGER_OPTS: ElysiaSwaggerConfig = {
-    path: '/swagger',
-    scalarConfig: {
-        theme: 'kepler',
-        layout: 'modern',
+  path: "/swagger",
+  scalarConfig: {
+    theme: "kepler",
+    layout: "modern",
+  },
+  documentation: {
+    info: {
+      title: "ADL Backend Documentation",
+      version: "1.0.0",
     },
-    documentation: {
-        info: {
-            title: 'ADL Backend Documentation',
-            version: '1.0.0'
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
         },
-        components: {
-            securitySchemes: {
-                bearerAuth: {
-                    type: 'http',
-                    scheme: 'bearer',
-                    bearerFormat: 'JWT'
-                }
-            }
-        },
-        security: [
-            {
-                bearerAuth: []
-            }
-        ]
-    }
-}
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+};
 
 const handleError = ({ code, error, set }: any) => {
-    if (code === 'VALIDATION') {
-        set.status = 400;
-        return {
-            success: false,
-            message: "Validation Error",
-            errors: error.all
-        };
-    }
-
-    console.error(error);
-
+  if (code === "VALIDATION") {
+    set.status = 400;
     return {
-        success: false,
-        message: error.message || "Internal Server Error"
+      success: false,
+      message: "Validation Error",
+      errors: error.all,
     };
-}
+  }
+
+  console.error(error);
+
+  return {
+    success: false,
+    message: error.message || "Internal Server Error",
+  };
+};
 
 export const app = new Elysia()
-    .use(cors())
-    .use(loggerPlugin)
-    .use(swagger(SWAGGER_OPTS))
-    .get("/", () => ({
-        message: "ADL Backend API",
-        status: "running"
-    }))
-    .group("/api", (app) =>
-        app
-            .get("/health", () => ({ status: "ok" }))
-            .use(authModule)
-            .use(activityModule)
-            .use(userModule)
-    )
-    .onError(handleError);
+  .use(
+    cors({
+      origin: corsOrigin,
+    }),
+  )
+  .use(loggerPlugin)
+  .use(swagger(SWAGGER_OPTS))
+  .get("/", () => ({
+    message: "ADL Backend API",
+    status: "running",
+  }))
+  .group("/api", (app) =>
+    app
+      .get("/health", () => ({ status: "ok" }))
+      .use(authModule)
+      .use(activityModule)
+      .use(userModule),
+  )
+  .onError(handleError);
 
 if (import.meta.main) {
-    app.listen({
-        port: Number(port),
-        hostname: '0.0.0.0'
-    });
+  app.listen({
+    port: Number(port),
+    hostname: "0.0.0.0",
+  });
 
-    console.log(
-        `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-    );
+  console.log(
+    `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+  );
 }
 
 export type App = typeof app;
