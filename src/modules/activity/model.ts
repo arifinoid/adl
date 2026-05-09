@@ -4,6 +4,7 @@ export const CreateActivityModel = t.Object({
     title: t.String(),
     description: t.Optional(t.String()),
     scheduledAt: t.Optional(t.String()),
+    imageUrl: t.Optional(t.String()),
 });
 
 export const UpdateActivityModel = t.Object({
@@ -11,6 +12,7 @@ export const UpdateActivityModel = t.Object({
     description: t.Optional(t.String()),
     scheduledAt: t.Optional(t.String()),
     isCompleted: t.Optional(t.Boolean()),
+    imageUrl: t.Optional(t.String()),
 });
 
 export const ActivityParamsModel = t.Object({
@@ -31,7 +33,8 @@ export const ActivityModel = t.Object({
     isCompleted: t.Boolean(),
     scheduledAt: t.Union([t.Date(), t.Null(), t.String()]), // Handle both Date objects and ISO strings
     createdAt: t.Any(), // Simplest for now
-    userId: t.Number()
+    userId: t.Number(),
+    imageUrl: t.Union([t.String(), t.Null()])
 });
 
 export type CreateActivityBody = typeof CreateActivityModel.static;

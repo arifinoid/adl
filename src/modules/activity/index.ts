@@ -58,6 +58,7 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
             userId: user!.id,
             title: body.title,
             description: body.description,
+            imageUrl: body.imageUrl,
             scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null,
         });
     }, {
@@ -71,7 +72,8 @@ export const activityModule = new Elysia({ prefix: "/activities", name: "activit
     .patch("/:id", async ({ params, body, user, set }) => {
         const updateData = {
             ...body,
-            scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : undefined
+            scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : undefined,
+            imageUrl: body.imageUrl
         };
 
         const updated = await activityService.update(params.id, user!.id, updateData);

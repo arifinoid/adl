@@ -5,6 +5,7 @@ export const users = pgTable("users", {
     username: text("username").notNull().unique(),
     email: text("email").notNull().unique(),
     password: text("password").notNull(),
+    avatarUrl: text("avatar_url"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -15,6 +16,7 @@ export const activities = pgTable("activities", {
     description: text("description"),
     isCompleted: boolean("is_completed").default(false).notNull(),
     scheduledAt: timestamp("scheduled_at"),
+    imageUrl: text("image_url"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
