@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { AuthService } from "./service";
 import { RegisterModel, LoginModel } from "./model";
 import { isAuth } from "../../plugins/auth";
+import { authRateLimit } from "../../plugins/rate-limit";
 
 const authService = new AuthService();
 
@@ -10,6 +11,7 @@ export const authModule = new Elysia({ prefix: "/auth", name: "auth" })
         'auth.register': RegisterModel,
         'auth.login': LoginModel
     })
+    .use(authRateLimit)
     .post("/register", async ({ body, set }) => {
         const { username, email, password } = body;
 

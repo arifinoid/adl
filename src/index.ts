@@ -6,6 +6,8 @@ import { activityModule } from "./modules/activity";
 import { userModule } from "./modules/users";
 import { uploadModule } from "./modules/upload";
 import { loggerPlugin } from "./plugins/logger";
+import { globalRateLimit } from "./plugins/rate-limit";
+import { cachePlugin } from "./plugins/cache";
 
 const port = process.env.PORT || 8000;
 const corsOrigin = process.env.CORS_ORIGIN || true; // true allows all, or provide a specific string/array
@@ -62,6 +64,8 @@ export const app = new Elysia()
       origin: corsOrigin,
     }),
   )
+  .use(globalRateLimit)
+  .use(cachePlugin)
   .use(loggerPlugin)
   .use(swagger(SWAGGER_OPTS))
   .get("/", () => ({

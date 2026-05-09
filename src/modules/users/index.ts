@@ -5,6 +5,8 @@ import { db } from "../../db";
 import { users } from "../../db/schema";
 import { eq } from "drizzle-orm";
 
+import { cache } from "../../plugins/cache";
+
 export const userModule = new Elysia({ prefix: "/users", name: "user" })
     .use(isAuth)
     .get("/profile", ({ user }) => {
@@ -25,12 +27,17 @@ export const userModule = new Elysia({ prefix: "/users", name: "user" })
             summary: 'Get current user profile'
         }
     })
-    .patch("/profile", async ({ user, body }) => {
+    .patch("/profile", async ({ user, body, token }) => {
         const [updatedUser] = await db
             .update(users)
             .set(body)
             .where(eq(users.id, user!.id))
             .returning();
+        
+        // Invalidate the session cache for this token
+        if (token) {
+            cache.delete(`session:${token}`);
+        }
         
         return {
             id: updatedUser.id,
