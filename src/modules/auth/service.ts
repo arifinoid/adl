@@ -58,6 +58,7 @@ export class AuthService {
                 id: users.id,
                 username: users.username,
                 email: users.email,
+                avatarUrl: users.avatarUrl,
                 createdAt: sessions.createdAt,
             })
             .from(sessions)
